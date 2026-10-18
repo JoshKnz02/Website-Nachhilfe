@@ -139,6 +139,10 @@ a:hover { color: var(--red); }
 .section-body > :last-child { margin-bottom: 0; }
 .section-body p { max-width: 62ch; }
 
+ul.focus { margin: 0 0 1.25rem; padding-left: 1.25rem; max-width: 60ch; }
+ul.focus li { margin-bottom: .35rem; }
+ul.focus li::marker { color: var(--red); }
+
 dl.formats { margin: 1.75rem 0 0; }
 dl.formats dt { font-family: var(--serif); font-weight: 700; font-size: 1.2rem; }
 dl.formats dd { margin: 0 0 1.5rem; max-width: 60ch; }

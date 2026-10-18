@@ -6,7 +6,7 @@ Statische Website ohne Build-Schritt und ohne externe Ressourcen. Dateien: `inde
 
 Vor der Veröffentlichung müssen diese Platzhalter in allen HTML-Dateien ersetzt werden:
 
-`{{NAME}}`, `{{STRASSE}}`, `{{PLZ_ORT}}`, `{{EMAIL}}`, `{{TELEFON}}`, `{{PREIS_ONLINE}}`, `{{PREIS_VOR_ORT}}`
+`{{NAME}}`, `{{STRASSE}}`, `{{PLZ_ORT}}`, `{{EMAIL}}`, `{{TELEFON}}`
 
 Kontrolle: `grep -rn "{{" *.html` darf nichts mehr finden.
 
