@@ -16,10 +16,10 @@
       <a class="brand" href="./">Mathe-Nachhilfe</a>
       <nav class="site-nav" aria-label="Hauptnavigation">
         <a href="#angebot">Angebot</a>
-        <a href="#ablauf">Ablauf</a>
         <a href="#person">Zur Person</a>
+        <a href="#ablauf">Ablauf</a>
         <a href="#preise">Preise</a>
-        <a href="#kontakt">Kontakt</a>
+        <a class="nav-cta" href="mailto:joshua.kunz02@gmx.de?subject=Nachhilfe-Anfrage">Anfrage</a>
       </nav>
     </div>
   </header>
@@ -34,6 +34,7 @@
             <a class="btn" href="mailto:joshua.kunz02@gmx.de?subject=Nachhilfe-Anfrage">Kostenlos kennenlernen</a>
             <a href="#preise">Preise ansehen</a>
           </div>
+          <p class="hero-note">Das Kennenlernen dauert 30 Minuten, ist kostenlos und unverbindlich.</p>
         </div>
 
         <div class="fig-wrap">
@@ -72,7 +73,20 @@
 
     <section class="section" id="angebot" aria-labelledby="h-angebot">
       <div class="wrap">
-        <h2 id="h-angebot">Angebot</h2>
+        <div class="side">
+          <h2 id="h-angebot">Angebot</h2>
+          <svg class="margin-note" viewBox="0 0 150 150" aria-hidden="true" focusable="false">
+            <g fill="none" stroke="var(--ink-soft)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M24 100H124M24 100V34"/>
+              <path d="M24 88H36V100"/>
+            </g>
+            <path d="M124 100L24 34" fill="none" stroke="var(--red)" stroke-width="2" stroke-linecap="round"/>
+            <text x="11" y="72" text-anchor="middle">a</text>
+            <text x="74" y="118" text-anchor="middle">b</text>
+            <text class="t-red" x="86" y="54" text-anchor="middle">c</text>
+            <text x="74" y="143" text-anchor="middle">a² + b² = c²</text>
+          </svg>
+        </div>
         <div class="section-body">
           <p>Ich biete individuelle Mathe-Nachhilfe für Schülerinnen und Schüler der Klassen 5 bis 13 an. Wir richten den Unterricht nach deinen Fragen, deinem Lernstand und deinen Zielen aus. Mögliche Schwerpunkte:</p>
           <ul class="focus">
@@ -92,10 +106,32 @@
       </div>
     </section>
 
+    <section class="section" id="person" aria-labelledby="h-person">
+      <div class="wrap">
+        <h2 id="h-person">Zur Person</h2>
+        <div class="section-body person">
+          <img class="portrait" src="joshua-kunz.jpg" width="720" height="900" loading="lazy" alt="Porträt von Joshua Kunz">
+          <div class="person-text">
+            <p>Ich bin Joshua und studiere am Karlsruher Institut für Technologie (KIT) Mathematik und Sport auf gymnasiales Lehramt. Aktuell bin ich im Masterstudium.</p>
+            <p>Erfahrung im Erklären und in der Nachhilfe habe ich durch die regelmäßige Unterstützung im Freundes- und Bekanntenkreis sowie durch mein Schulpraktikum an einer beruflichen Schule während des Masters gesammelt.</p>
+            <p>Mathe kann herausfordernd sein, besonders wenn Grundlagen fehlen oder im Unterricht zu wenig Zeit für Fragen bleibt. Ich kenne das Gefühl aus meinem Mathestudium, vor einer Aufgabe zu sitzen und nicht weiterzukommen. Umso schöner ist der Moment, in dem es „Klick“ macht und man sagt: „Ah, jetzt verstehe ich’s!“ Diesen Moment möchte ich in der Nachhilfe erreichen.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <section class="section" id="ablauf" aria-labelledby="h-ablauf">
       <div class="wrap">
         <h2 id="h-ablauf">So läuft es ab</h2>
         <div class="section-body">
+          <div class="rise" aria-hidden="true">
+            <svg viewBox="0 0 600 90" preserveAspectRatio="none" focusable="false">
+              <line x1="0" y1="84.5" x2="580" y2="0.4" stroke="var(--red)" stroke-width="2.5" stroke-linecap="round" vector-effect="non-scaling-stroke"/>
+            </svg>
+            <span class="pt" style="left: calc(0% + .95rem); top: 92%">1</span>
+            <span class="pt" style="left: calc(33.333% + .95rem); top: 59.9%">2</span>
+            <span class="pt" style="left: calc(66.667% + .95rem); top: 27.7%">3</span>
+          </div>
           <ol class="steps">
             <li>
               <div>
@@ -116,20 +152,6 @@
               </div>
             </li>
           </ol>
-        </div>
-      </div>
-    </section>
-
-    <section class="section" id="person" aria-labelledby="h-person">
-      <div class="wrap">
-        <h2 id="h-person">Zur Person</h2>
-        <div class="section-body person">
-          <img class="portrait" src="joshua-kunz.jpg" width="720" height="900" loading="lazy" alt="Porträt von Joshua Kunz">
-          <div class="person-text">
-            <p>Ich bin Joshua und studiere am Karlsruher Institut für Technologie (KIT) Mathematik und Sport auf gymnasiales Lehramt. Aktuell bin ich im Masterstudium.</p>
-            <p>Erfahrung im Erklären und in der Nachhilfe habe ich durch die regelmäßige Unterstützung im Freundes- und Bekanntenkreis sowie durch mein Schulpraktikum an einer beruflichen Schule während des Masters gesammelt.</p>
-            <p>Mathe kann herausfordernd sein, besonders wenn Grundlagen fehlen oder im Unterricht zu wenig Zeit für Fragen bleibt. Ich kenne das Gefühl aus meinem Mathestudium, vor einer Aufgabe zu sitzen und nicht weiterzukommen. Umso schöner ist der Moment, in dem es „Klick“ macht und man sagt: „Ah, jetzt verstehe ich’s!“ Diesen Moment möchte ich in der Nachhilfe erreichen.</p>
-          </div>
         </div>
       </div>
     </section>
@@ -155,7 +177,12 @@
 
     <section class="section" id="kontakt" aria-labelledby="h-kontakt">
       <div class="wrap">
-        <h2 id="h-kontakt">Kontakt</h2>
+        <div class="side">
+          <h2 id="h-kontakt">Kontakt</h2>
+          <svg class="margin-note" viewBox="0 0 150 90" aria-hidden="true" focusable="false">
+            <path d="M22 52L46 74L112 14" fill="none" stroke="var(--red)" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
         <div class="section-body">
           <p>Schreib mir an <a href="mailto:joshua.kunz02@gmx.de?subject=Nachhilfe-Anfrage">joshua.kunz02@gmx.de</a>.</p>
           <p>Hilfreich sind diese Angaben: welche Klasse und Schulform du besuchst, bei welchen Themen du Unterstützung brauchst und wann du Zeit hast. Bitte nenne nicht mehr persönliche Daten, als dafür nötig sind.</p>

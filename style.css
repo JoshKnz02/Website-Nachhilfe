@@ -55,6 +55,11 @@ a:hover { color: var(--red); }
 .site-nav { display: flex; flex-wrap: wrap; gap: .25rem 1.5rem; font-size: .95rem; }
 .site-nav a { text-decoration: none; color: var(--ink-soft); }
 .site-nav a:hover { color: var(--red); text-decoration: underline; }
+.site-nav a.nav-cta {
+  background: var(--ink); color: var(--paper);
+  padding: .3rem .9rem; border-radius: 3px; font-weight: 600;
+}
+.site-nav a.nav-cta:hover { background: var(--red); color: #fff; text-decoration: none; }
 
 /* Einstieg: Karopapier mit Parabel */
 .hero {
@@ -84,6 +89,7 @@ a:hover { color: var(--red); }
 }
 .lead { font-size: 1.2rem; max-width: 34rem; margin: 0 0 2rem; }
 .hero-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 1rem 1.75rem; }
+.hero-note { margin: 1rem 0 0; color: var(--ink-soft); font-size: .95rem; }
 
 .btn {
   display: inline-block;
@@ -139,6 +145,16 @@ a:hover { color: var(--red); }
 .section-body > :last-child { margin-bottom: 0; }
 .section-body p { max-width: 62ch; }
 
+/* Randnotizen: kleine Skizzen unter dem Titel, wie Notizen am Heftrand */
+.section .side { align-self: start; position: sticky; top: 1.5rem; }
+.section .side h2 { position: static; }
+.margin-note { display: block; width: 9.5rem; height: auto; margin-top: 1.5rem; overflow: visible; }
+.margin-note text { font-family: var(--serif); font-style: italic; font-size: 15px; fill: var(--ink-soft); }
+.margin-note .t-red { fill: var(--red); }
+
+/* Ablauf: drei Schritte als Punkte auf einer ansteigenden Geraden (nur Desktop) */
+.rise { display: none; }
+
 .section-body.person { max-width: 56rem; display: grid; grid-template-columns: minmax(0, 1fr) 13rem; gap: 1.5rem 2.5rem; align-items: start; }
 .person-text > :first-child { margin-top: 0; }
 .person-text > :last-child { margin-bottom: 0; }
@@ -172,7 +188,7 @@ table.prices { border-collapse: collapse; width: 100%; max-width: 30rem; margin:
 table.prices th, table.prices td { text-align: left; padding: .9rem 0; border-bottom: 1px solid var(--rule); }
 table.prices thead th { font-weight: 600; color: var(--ink-soft); font-size: .95rem; padding-top: 0; }
 table.prices td:last-child, table.prices th:last-child { text-align: right; }
-table.prices .price { font-family: var(--serif); font-size: 1.35rem; font-weight: 700; }
+table.prices .price { font-family: var(--serif); font-size: 1.35rem; font-weight: 700; white-space: nowrap; padding-left: 1rem; }
 .note { color: var(--ink-soft); font-size: .98rem; }
 
 /* Fuß */
@@ -194,8 +210,27 @@ table.prices .price { font-family: var(--serif); font-size: 1.35rem; font-weight
   .hero .wrap { grid-template-columns: minmax(0, 1fr); }
   .hero .fig-wrap { max-width: 26rem; }
   .section .wrap { grid-template-columns: minmax(0, 1fr); row-gap: 1.25rem; }
-  .section h2 { position: static; }
+  .section h2, .section .side { position: static; }
+  .margin-note { display: none; }
+  .site-nav { gap: .25rem .8rem; font-size: .88rem; }
+  .site-nav a.nav-cta { padding: .25rem .7rem; }
   .section-body { padding-left: 1.1rem; }
   .section-body.person { grid-template-columns: minmax(0, 1fr); }
   .portrait { grid-column: 1; grid-row: 1; max-width: 11rem; }
+}
+
+@media (min-width: 52.01rem) {
+  #ablauf .section-body { max-width: 56rem; }
+  .rise { display: block; position: relative; height: 6.5rem; margin: .5rem 0 1.25rem; }
+  .rise svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+  .rise .pt {
+    position: absolute; width: 1.9rem; height: 1.9rem;
+    transform: translate(-50%, -50%);
+    display: grid; place-items: center;
+    border-radius: 50%; background: var(--ink); color: var(--paper);
+    font-family: var(--serif); font-style: italic; font-size: 1.05rem; line-height: 1;
+  }
+  ol.steps { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  ol.steps li { display: block; margin-bottom: 0; padding-right: 1.75rem; }
+  ol.steps li::before { display: none; }
 }
