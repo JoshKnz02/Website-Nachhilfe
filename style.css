@@ -139,6 +139,11 @@ a:hover { color: var(--red); }
 .section-body > :last-child { margin-bottom: 0; }
 .section-body p { max-width: 62ch; }
 
+.section-body.person { max-width: 56rem; display: grid; grid-template-columns: minmax(0, 1fr) 13rem; gap: 1.5rem 2.5rem; align-items: start; }
+.person-text > :first-child { margin-top: 0; }
+.person-text > :last-child { margin-bottom: 0; }
+.portrait { grid-column: 2; grid-row: 1; width: 100%; height: auto; aspect-ratio: 4 / 5; object-fit: cover; border-radius: 3px; border: 1px solid var(--rule); background: var(--grid); }
+
 ul.focus { margin: 0 0 1.25rem; padding-left: 1.25rem; max-width: 60ch; }
 ul.focus li { margin-bottom: .35rem; }
 ul.focus li::marker { color: var(--red); }
@@ -191,4 +196,6 @@ table.prices .price { font-family: var(--serif); font-size: 1.35rem; font-weight
   .section .wrap { grid-template-columns: minmax(0, 1fr); row-gap: 1.25rem; }
   .section h2 { position: static; }
   .section-body { padding-left: 1.1rem; }
+  .section-body.person { grid-template-columns: minmax(0, 1fr); }
+  .portrait { grid-column: 1; grid-row: 1; max-width: 11rem; }
 }
