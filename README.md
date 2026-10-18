@@ -4,11 +4,7 @@ Statische Website ohne Build-Schritt und ohne externe Ressourcen. Dateien: `inde
 
 ## Platzhalter
 
-Vor der Veröffentlichung müssen diese Platzhalter in allen HTML-Dateien ersetzt werden:
-
-`{{TELEFON}}`
-
-Kontrolle: `grep -rn "{{" *.html` darf nichts mehr finden.
+Aktuell sind keine Platzhalter mehr offen. Kontrolle vor Änderungen: `grep -rn "{{" *.html` darf nichts finden.
 
 ## Vorschau lokal
 
