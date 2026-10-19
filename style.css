@@ -7,9 +7,27 @@
   --ink: #1b2a41;
   --ink-soft: #4b5b72;
   --red: #b3302a;
+  --on-red: #ffffff;
+  --head-bg: rgba(246, 248, 250, .88);
+  --head-h: 3.75rem;
   --serif: "Palatino Linotype", Palatino, "Book Antiqua", "URW Palladio L", P052, Georgia, serif;
   --sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  color-scheme: light;
+  color-scheme: light dark;
+}
+
+/* Dunkelmodus: gleiche Rollen, andere Werte. Kontraste gerechnet: Text 8,5:1, Rot 5,7:1. */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --paper: #121a26;
+    --grid: #1b2636;
+    --rule: #2e3c50;
+    --ink: #e9eff7;
+    --ink-soft: #a9b6c9;
+    --red: #ee6b60;
+    --on-red: #121a26;
+    --head-bg: rgba(18, 26, 38, .86);
+  }
+  .portrait { filter: brightness(.93); }
 }
 
 *, *::before, *::after { box-sizing: border-box; }
@@ -23,15 +41,18 @@ body {
   font-family: var(--sans);
   font-size: 1.0625rem;
   line-height: 1.65;
+  font-optical-sizing: auto;
+  overflow-wrap: break-word;
 }
 
-a { color: var(--ink); text-decoration-thickness: 1px; text-underline-offset: 3px; }
-a:hover { color: var(--red); }
+/* Rückmeldung sofort beim Drücken, nicht erst beim Loslassen */
+a { color: var(--ink); text-decoration-thickness: 1px; text-underline-offset: 3px; touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
+a:hover, a:active { color: var(--red); }
 :focus-visible { outline: 3px solid var(--red); outline-offset: 3px; border-radius: 2px; }
 
 .skip {
   position: absolute; left: 1rem; top: -4rem;
-  background: var(--ink); color: var(--paper); padding: .6rem 1rem; z-index: 10;
+  background: var(--ink); color: var(--paper); padding: .6rem 1rem; z-index: 30;
 }
 .skip:focus { top: 1rem; }
 
@@ -41,25 +62,49 @@ a:hover { color: var(--red); }
   padding-inline: clamp(1.25rem, 4vw, 2.5rem);
 }
 
-/* Kopfzeile */
-.site-head { border-bottom: 1px solid var(--rule); }
+/* Kopfzeile: lichtdurchlässige Ebene, Inhalt läuft darunter durch */
+.site-head {
+  position: relative; z-index: 20;
+  background: var(--head-bg);
+  -webkit-backdrop-filter: blur(18px) saturate(160%);
+  backdrop-filter: blur(18px) saturate(160%);
+}
+.site-head::after {
+  content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 1px;
+  background: var(--rule);
+}
+/* Die Kante erscheint erst, wenn Inhalt unter die Leiste läuft */
+@supports (animation-timeline: scroll()) {
+  .site-head::after {
+    opacity: 0;
+    animation: edge linear both;
+    animation-timeline: scroll(root block);
+    animation-range: 0 3rem;
+  }
+  @keyframes edge { to { opacity: 1; } }
+}
 .site-head .wrap {
-  display: flex; flex-wrap: wrap; align-items: baseline;
-  justify-content: space-between; gap: .5rem 2rem;
-  padding-block: 1rem;
+  display: flex; flex-wrap: wrap; align-items: center;
+  justify-content: space-between; gap: .25rem 2rem;
+  padding-block: .5rem;
 }
 .brand {
   font-family: var(--serif); font-weight: 700; font-size: 1.2rem;
+  letter-spacing: -.005em;
   text-decoration: none; color: var(--ink);
 }
-.site-nav { display: flex; flex-wrap: wrap; gap: .25rem 1.5rem; font-size: .95rem; }
-.site-nav a { text-decoration: none; color: var(--ink-soft); }
-.site-nav a:hover { color: var(--red); text-decoration: underline; }
+.site-nav { display: flex; flex-wrap: wrap; align-items: center; gap: 0 1.5rem; font-size: .95rem; letter-spacing: .01em; }
+/* Trefferfläche mindestens 44 Punkte hoch, sichtbare Größe unverändert */
+.site-nav a, .site-foot a { display: inline-flex; align-items: center; min-height: 2.75rem; text-decoration: none; }
+.site-nav a { color: var(--ink-soft); }
+.site-nav a:hover, .site-nav a:active { color: var(--red); text-decoration: underline; }
 .site-nav a.nav-cta {
   background: var(--ink); color: var(--paper);
-  padding: .3rem .9rem; border-radius: 3px; font-weight: 600;
+  padding-inline: .9rem; border-radius: 3px; font-weight: 600;
+  transition: transform 90ms ease-out;
 }
-.site-nav a.nav-cta:hover { background: var(--red); color: #fff; text-decoration: none; }
+.site-nav a.nav-cta:hover, .site-nav a.nav-cta:active { background: var(--red); color: var(--on-red); text-decoration: none; }
+.site-nav a.nav-cta:active { transform: scale(.97); }
 
 /* Einstieg: Karopapier mit Parabel */
 .hero {
@@ -78,27 +123,33 @@ a:hover { color: var(--red); }
   align-items: center;
   padding-block: clamp(2.5rem, 7vw, 5.5rem);
 }
+/* Große Schrift: engere Laufweite und knappe Zeilenhöhe */
 .hero h1 {
   font-family: var(--serif);
   font-weight: 700;
   font-size: clamp(2.5rem, 6vw, 4.6rem);
-  line-height: 1.08;
-  letter-spacing: -.01em;
+  line-height: 1.04;
+  letter-spacing: -.022em;
+  text-wrap: balance;
   margin: 0 0 1.25rem;
   max-width: 14ch;
 }
-.lead { font-size: 1.2rem; max-width: 34rem; margin: 0 0 2rem; }
-.hero-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 1rem 1.75rem; }
-.hero-note { margin: 1rem 0 0; color: var(--ink-soft); font-size: .95rem; }
+.lead { font-size: 1.2rem; max-width: 34rem; margin: 0 0 2rem; text-wrap: pretty; }
+.hero-actions { display: flex; flex-wrap: wrap; align-items: center; gap: .25rem 1.75rem; }
+.hero-actions > a:not(.btn) { display: inline-flex; align-items: center; min-height: 2.75rem; }
+.hero-note { margin: 1rem 0 0; color: var(--ink-soft); font-size: .95rem; letter-spacing: .01em; }
 
 .btn {
   display: inline-block;
   background: var(--ink); color: var(--paper);
-  padding: .85rem 1.4rem;
+  padding: .85rem min(1.4rem, 6vw);
+  max-width: 100%;
   border-radius: 3px;
   font-weight: 600; text-decoration: none;
+  transition: transform 90ms ease-out;
 }
-.btn:hover { background: var(--red); color: #fff; }
+.btn:hover, .btn:active { background: var(--red); color: var(--on-red); }
+.btn:active { transform: scale(.97); }
 
 .fig { width: 100%; height: auto; display: block; overflow: visible; }
 .fig text { font-family: var(--serif); font-style: italic; font-size: 17px; fill: var(--ink); }
@@ -119,6 +170,8 @@ a:hover { color: var(--red); }
   .fig .curve, .fig .tangent, .fig .late {
     animation: none; stroke-dashoffset: 0; opacity: 1;
   }
+  .btn, .site-nav a.nav-cta { transition: none; }
+  .btn:active, .site-nav a.nav-cta:active { transform: none; }
 }
 
 /* Abschnitte im Heft-Layout: Titel links, Inhalt rechts neben dem roten Rand */
@@ -132,9 +185,11 @@ a:hover { color: var(--red); }
 .section h2 {
   font-family: var(--serif);
   font-size: 1.6rem; line-height: 1.2;
+  letter-spacing: -.01em;
+  text-wrap: balance;
   margin: 0;
   align-self: start;
-  position: sticky; top: 1.5rem;
+  position: sticky; top: calc(var(--head-h) + 1.25rem);
 }
 .section-body {
   border-left: 2px solid var(--red);
@@ -145,8 +200,8 @@ a:hover { color: var(--red); }
 .section-body > :last-child { margin-bottom: 0; }
 .section-body p { max-width: 62ch; }
 
-/* Randnotizen: kleine Skizzen unter dem Titel, wie Notizen am Heftrand */
-.section .side { align-self: start; position: sticky; top: 1.5rem; }
+/* Randnotiz: kleine Skizze unter dem Titel, wie am Heftrand */
+.section .side { align-self: start; position: sticky; top: calc(var(--head-h) + 1.25rem); }
 .section .side h2 { position: static; }
 .margin-note { display: block; width: 9.5rem; height: auto; margin-top: 1.5rem; overflow: visible; }
 .margin-note text { font-family: var(--serif); font-style: italic; font-size: 15px; fill: var(--ink-soft); }
@@ -186,21 +241,34 @@ ol.steps p { margin: .15rem 0 0; max-width: 58ch; }
 
 table.prices { border-collapse: collapse; width: 100%; max-width: 30rem; margin: 1.5rem 0 1rem; }
 table.prices th, table.prices td { text-align: left; padding: .9rem 0; border-bottom: 1px solid var(--rule); }
-table.prices thead th { font-weight: 600; color: var(--ink-soft); font-size: .95rem; padding-top: 0; }
+table.prices thead th { font-weight: 600; color: var(--ink-soft); font-size: .95rem; letter-spacing: .01em; padding-top: 0; }
 table.prices td:last-child, table.prices th:last-child { text-align: right; }
-table.prices .price { font-family: var(--serif); font-size: 1.35rem; font-weight: 700; white-space: nowrap; padding-left: 1rem; }
-.note { color: var(--ink-soft); font-size: .98rem; }
+table.prices .price { font-family: var(--serif); font-size: 1.35rem; font-weight: 700; padding-left: 1rem; }
+/* Nur umbruchfrei, solange Platz ist: bei großer Systemschrift darf der Preis umbrechen */
+@media (min-width: 22rem) { table.prices .price { white-space: nowrap; } }
+/* Große Systemschrift: Zeilen stapeln, wenn der Platz im Verhältnis zur Schrift zu knapp wird */
+.price-wrap { container-type: inline-size; }
+@container (max-width: 15rem) {
+  table.prices, table.prices tbody, table.prices tr, table.prices th, table.prices td { display: block; }
+  table.prices thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+  table.prices tr { padding: .9rem 0; border-bottom: 1px solid var(--rule); }
+  table.prices th, table.prices td { padding: 0; border: 0; text-align: left; }
+  table.prices td:last-child, table.prices th:last-child { text-align: left; }
+  table.prices .price { padding-left: 0; white-space: normal; }
+}
+.note { color: var(--ink-soft); font-size: .98rem; letter-spacing: .01em; }
 
 /* Fuß */
-.site-foot { padding-block: 2rem; font-size: .95rem; color: var(--ink-soft); }
-.site-foot .wrap { display: flex; flex-wrap: wrap; gap: .5rem 1.75rem; }
-.site-foot a { color: var(--ink-soft); }
-.site-foot a:hover { color: var(--red); }
+.site-foot { padding-block: 1rem; font-size: .95rem; letter-spacing: .01em; color: var(--ink-soft); }
+.site-foot .wrap { display: flex; flex-wrap: wrap; gap: 0 1.75rem; }
+.site-foot a { color: var(--ink-soft); text-decoration: underline; }
+.site-foot a:hover, .site-foot a:active { color: var(--red); }
 
 /* Rechtstexte */
+.legal { overflow-wrap: break-word; }
 .legal .wrap { max-width: 46rem; padding-block: clamp(2rem, 6vw, 4rem); }
-.legal h1 { font-family: var(--serif); font-size: clamp(2rem, 4vw, 2.6rem); line-height: 1.15; margin: 0 0 1.5rem; }
-.legal h2 { font-family: var(--serif); font-size: 1.35rem; margin: 2.25rem 0 .5rem; }
+.legal h1 { font-family: var(--serif); font-size: clamp(2rem, 4vw, 2.6rem); line-height: 1.12; letter-spacing: -.015em; margin: 0 0 1.5rem; }
+.legal h2 { font-family: var(--serif); font-size: 1.35rem; letter-spacing: -.005em; margin: 2.25rem 0 .5rem; }
 .legal p, .legal ul, .legal address { max-width: 65ch; margin: 0 0 1rem; }
 .legal address { font-style: normal; }
 .legal ul { padding-left: 1.25rem; }
@@ -212,14 +280,18 @@ table.prices .price { font-family: var(--serif); font-size: 1.35rem; font-weight
   .section .wrap { grid-template-columns: minmax(0, 1fr); row-gap: 1.25rem; }
   .section h2, .section .side { position: static; }
   .margin-note { display: none; }
-  .site-nav { gap: .25rem .8rem; font-size: .88rem; }
-  .site-nav a.nav-cta { padding: .25rem .7rem; }
+  .site-nav { gap: 0 .55rem; font-size: .86rem; letter-spacing: 0; }
+  .site-nav a.nav-cta { padding-inline: .65rem; }
   .section-body { padding-left: 1.1rem; }
   .section-body.person { grid-template-columns: minmax(0, 1fr); }
   .portrait { grid-column: 1; grid-row: 1; max-width: 11rem; }
 }
 
 @media (min-width: 52.01rem) {
+  /* Am Desktop bleibt die Leiste stehen: Kontakt ist von jeder Stelle aus ein Klick entfernt */
+  .site-head { position: sticky; top: 0; }
+  [id].section { scroll-margin-top: var(--head-h); }
+
   #ablauf .section-body { max-width: 56rem; }
   .rise { display: block; position: relative; height: 6.5rem; margin: .5rem 0 1.25rem; }
   .rise svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
@@ -233,4 +305,16 @@ table.prices .price { font-family: var(--serif); font-size: 1.35rem; font-weight
   ol.steps { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
   ol.steps li { display: block; margin-bottom: 0; padding-right: 1.75rem; }
   ol.steps li::before { display: none; }
+}
+
+/* Weniger Transparenz: Leiste wird deckend */
+@media (prefers-reduced-transparency: reduce) {
+  .site-head { background: var(--paper); -webkit-backdrop-filter: none; backdrop-filter: none; }
+}
+
+/* Mehr Kontrast: deckende Leiste, kräftige Linien, Nebentext in Haupttextfarbe */
+@media (prefers-contrast: more) {
+  :root { --ink-soft: var(--ink); --rule: color-mix(in srgb, var(--ink) 60%, var(--paper)); }
+  .site-head { background: var(--paper); -webkit-backdrop-filter: none; backdrop-filter: none; }
+  .site-head::after { opacity: 1; animation: none; }
 }
