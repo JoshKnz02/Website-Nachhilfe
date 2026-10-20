@@ -10,6 +10,7 @@
   --on-red: #ffffff;
   --head-bg: rgba(246, 248, 250, .88);
   --head-h: 3.75rem;
+  --img-outline: oklch(0 0 0 / .1);
   --serif: "Palatino Linotype", Palatino, "Book Antiqua", "URW Palladio L", P052, Georgia, serif;
   --sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   color-scheme: light dark;
@@ -26,6 +27,7 @@
     --red: #ee6b60;
     --on-red: #121a26;
     --head-bg: rgba(18, 26, 38, .86);
+    --img-outline: oklch(1 0 0 / .1);
   }
   .portrait { filter: brightness(.93); }
 }
@@ -43,12 +45,23 @@ body {
   line-height: 1.65;
   font-optical-sizing: auto;
   overflow-wrap: break-word;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
+/* Keine einzelnen Wörter in der letzten Zeile */
+p, li, dd { text-wrap: pretty; }
+
 /* Rückmeldung sofort beim Drücken, nicht erst beim Loslassen */
-a { color: var(--ink); text-decoration-thickness: 1px; text-underline-offset: 3px; touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
-a:hover, a:active { color: var(--red); }
-:focus-visible { outline: 3px solid var(--red); outline-offset: 3px; border-radius: 2px; }
+a {
+  color: var(--ink); text-decoration-thickness: 1px; text-underline-offset: 3px;
+  touch-action: manipulation; -webkit-tap-highlight-color: transparent;
+  border-radius: 2px;
+  transition: color 120ms ease-out;
+}
+a:active { color: var(--red); }
+/* Der Fokusring übernimmt den Radius des Elements (plus Abstand), Buttons behalten ihre 3 px */
+:focus-visible { outline: 3px solid var(--red); outline-offset: 3px; }
 
 .skip {
   position: absolute; left: 1rem; top: -4rem;
@@ -96,15 +109,14 @@ a:hover, a:active { color: var(--red); }
 .site-nav { display: flex; flex-wrap: wrap; align-items: center; gap: 0 1.5rem; font-size: .95rem; letter-spacing: .01em; }
 /* Trefferfläche mindestens 44 Punkte hoch, sichtbare Größe unverändert */
 .site-nav a, .site-foot a { display: inline-flex; align-items: center; min-height: 2.75rem; text-decoration: none; }
-.site-nav a { color: var(--ink-soft); }
-.site-nav a:hover, .site-nav a:active { color: var(--red); text-decoration: underline; }
+.site-nav a { color: var(--ink-soft); min-width: 2.75rem; justify-content: center; }
+.site-nav a:active { color: var(--red); text-decoration: underline; }
 .site-nav a.nav-cta {
   background: var(--ink); color: var(--paper);
   padding-inline: .9rem; border-radius: 3px; font-weight: 600;
-  transition: transform 90ms ease-out;
+  transition: transform 100ms ease-out, background-color 120ms ease-out, color 120ms ease-out;
 }
-.site-nav a.nav-cta:hover, .site-nav a.nav-cta:active { background: var(--red); color: var(--on-red); text-decoration: none; }
-.site-nav a.nav-cta:active { transform: scale(.97); }
+.site-nav a.nav-cta:active { background: var(--red); color: var(--on-red); text-decoration: none; transform: scale(.96); }
 
 /* Einstieg: Karopapier mit Parabel */
 .hero {
@@ -146,10 +158,9 @@ a:hover, a:active { color: var(--red); }
   max-width: 100%;
   border-radius: 3px;
   font-weight: 600; text-decoration: none;
-  transition: transform 90ms ease-out;
+  transition: transform 100ms ease-out, background-color 120ms ease-out, color 120ms ease-out;
 }
-.btn:hover, .btn:active { background: var(--red); color: var(--on-red); }
-.btn:active { transform: scale(.97); }
+.btn:active { background: var(--red); color: var(--on-red); transform: scale(.96); }
 
 .fig { width: 100%; height: auto; display: block; overflow: visible; }
 .fig text { font-family: var(--serif); font-style: italic; font-size: 17px; fill: var(--ink); }
@@ -158,10 +169,10 @@ a:hover, a:active { color: var(--red); }
 /* Einmalige Bewegung beim Laden: Kurve, Tangente, Berührpunkt */
 .fig .curve, .fig .tangent {
   stroke-dasharray: 1; stroke-dashoffset: 1;
-  animation: draw 1.4s cubic-bezier(.4, 0, .2, 1) .2s forwards;
+  animation: draw 1.4s cubic-bezier(.2, 0, 0, 1) .2s forwards;
 }
 .fig .tangent { animation-delay: 1.5s; animation-duration: .8s; }
-.fig .late { opacity: 0; animation: show .5s ease 2.2s forwards; }
+.fig .late { opacity: 0; animation: show .5s ease-out 2.2s forwards; }
 @keyframes draw { to { stroke-dashoffset: 0; } }
 @keyframes show { to { opacity: 1; } }
 
@@ -172,6 +183,7 @@ a:hover, a:active { color: var(--red); }
   }
   .btn, .site-nav a.nav-cta { transition: none; }
   .btn:active, .site-nav a.nav-cta:active { transform: none; }
+  a { transition: none; }
 }
 
 /* Abschnitte im Heft-Layout: Titel links, Inhalt rechts neben dem roten Rand */
@@ -213,7 +225,7 @@ a:hover, a:active { color: var(--red); }
 .section-body.person { max-width: 56rem; display: grid; grid-template-columns: minmax(0, 1fr) 13rem; gap: 1.5rem 2.5rem; align-items: start; }
 .person-text > :first-child { margin-top: 0; }
 .person-text > :last-child { margin-bottom: 0; }
-.portrait { grid-column: 2; grid-row: 1; width: 100%; height: auto; aspect-ratio: 4 / 5; object-fit: cover; border-radius: 3px; border: 1px solid var(--rule); background: var(--grid); }
+.portrait { grid-column: 2; grid-row: 1; width: 100%; height: auto; aspect-ratio: 4 / 5; object-fit: cover; border-radius: 3px; outline: 1px solid var(--img-outline); outline-offset: -1px; background: var(--grid); }
 
 ul.focus { margin: 0 0 1.25rem; padding-left: 1.25rem; max-width: 60ch; }
 ul.focus li { margin-bottom: .35rem; }
@@ -262,13 +274,13 @@ table.prices .price { font-family: var(--serif); font-size: 1.35rem; font-weight
 .site-foot { padding-block: 1rem; font-size: .95rem; letter-spacing: .01em; color: var(--ink-soft); }
 .site-foot .wrap { display: flex; flex-wrap: wrap; gap: 0 1.75rem; }
 .site-foot a { color: var(--ink-soft); text-decoration: underline; }
-.site-foot a:hover, .site-foot a:active { color: var(--red); }
+.site-foot a:active { color: var(--red); }
 
 /* Rechtstexte */
 .legal { overflow-wrap: break-word; }
 .legal .wrap { max-width: 46rem; padding-block: clamp(2rem, 6vw, 4rem); }
-.legal h1 { font-family: var(--serif); font-size: clamp(2rem, 4vw, 2.6rem); line-height: 1.12; letter-spacing: -.015em; margin: 0 0 1.5rem; }
-.legal h2 { font-family: var(--serif); font-size: 1.35rem; letter-spacing: -.005em; margin: 2.25rem 0 .5rem; }
+.legal h1 { font-family: var(--serif); font-size: clamp(2rem, 4vw, 2.6rem); line-height: 1.12; letter-spacing: -.015em; text-wrap: balance; margin: 0 0 1.5rem; }
+.legal h2 { font-family: var(--serif); font-size: 1.35rem; letter-spacing: -.005em; text-wrap: balance; margin: 2.25rem 0 .5rem; }
 .legal p, .legal ul, .legal address { max-width: 65ch; margin: 0 0 1rem; }
 .legal address { font-style: normal; }
 .legal ul { padding-left: 1.25rem; }
@@ -280,7 +292,7 @@ table.prices .price { font-family: var(--serif); font-size: 1.35rem; font-weight
   .section .wrap { grid-template-columns: minmax(0, 1fr); row-gap: 1.25rem; }
   .section h2, .section .side { position: static; }
   .margin-note { display: none; }
-  .site-nav { gap: 0 .55rem; font-size: .86rem; letter-spacing: 0; }
+  .site-nav { gap: 0 .3rem; font-size: .86rem; letter-spacing: 0; }
   .site-nav a.nav-cta { padding-inline: .65rem; }
   .section-body { padding-left: 1.1rem; }
   .section-body.person { grid-template-columns: minmax(0, 1fr); }
@@ -301,6 +313,7 @@ table.prices .price { font-family: var(--serif); font-size: 1.35rem; font-weight
     display: grid; place-items: center;
     border-radius: 50%; background: var(--ink); color: var(--paper);
     font-family: var(--serif); font-style: italic; font-size: 1.05rem; line-height: 1;
+    padding: .1em 0 0 .06em; /* Ziffern sitzen sonst etwa 1 px zu hoch und zu weit links */
   }
   ol.steps { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
   ol.steps li { display: block; margin-bottom: 0; padding-right: 1.75rem; }
@@ -317,4 +330,11 @@ table.prices .price { font-family: var(--serif); font-size: 1.35rem; font-weight
   :root { --ink-soft: var(--ink); --rule: color-mix(in srgb, var(--ink) 60%, var(--paper)); }
   .site-head { background: var(--paper); -webkit-backdrop-filter: none; backdrop-filter: none; }
   .site-head::after { opacity: 1; animation: none; }
+}
+
+/* Hover nur auf Geräten, die schweben können: auf Touch bliebe der Zustand nach dem Tippen hängen */
+@media (hover: hover) {
+  a:hover { color: var(--red); }
+  .site-nav a:hover { color: var(--red); text-decoration: underline; }
+  .site-nav a.nav-cta:hover, .btn:hover { background: var(--red); color: var(--on-red); text-decoration: none; }
 }
